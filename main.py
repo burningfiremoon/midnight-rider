@@ -8,7 +8,6 @@ import textwrap
 import sys
 import time
 
-
 INTRODUCTION = """
 
 WELCOME TO MIDNIGHT RIDER
@@ -24,8 +23,27 @@ ONE GOAL: SURVIVAL... and  THE CAR.
 REACH THE END BEFORE THE MAN GON GETCHU.
 
 """
+WIN = """
+You pressed the button to open the gate.
+This isn't the first time you've done this,
+so you know hot to time it exactly.
+Just ast the doors close, you slide right into HQ.
+You know you did the right thing, the government 
+would have just torn the car apart.
+They don't know its secrets...
+that it holds the key to different worlds.
+As you step out of the vehicle, Fido runs up to you.
+"Thank you for saving me," he says.
+As you take a couple of steps away from teh car,
+it makes a strange sound.
+It changes it shape.
+You've seen it before, but only on TV.
+"...Bumblebee???"
+"""
 CHOICES = """
      -----
+     A. Eat some tofu
+     B. Drive at a moderate speed
      C. Speed ahead at full throttle.
      D. Stop for fuel at a refuelling station.
         (No food available)
@@ -35,8 +53,8 @@ CHOICES = """
 """
 
 
-def intro():
-    for char in textwrap.dedent(INTRODUCTION):
+def type_text_output(text):
+    for char in textwrap.dedent(text):
         time.sleep(0.05)
         sys.stdout.write(char)
         sys.stdout.flush()
@@ -45,32 +63,59 @@ def intro():
 
 def main():
     # Show introduction
-    # intro()
+    type_text_output(INTRODUCTION)
 
     # CONSTANTS
     MAX_FUEL_LEVEL = 50
     MAX_TOFU_LEVEL = 3
+    Max_DISTANCE_TRAVELED = 100
 
     # variables
     done = False
     km_traveled: int = 0  # 100km traveled is the goal
     agents_distance = -20.0
-    turns = 0        # amount of turns taken
+    turns = 0  # amount of turns taken
     tofu = MAX_TOFU_LEVEL
     fuel = MAX_FUEL_LEVEL
-    hunger = 0       # hunger increases with number
-
+    hunger = 0  # hunger increases with number
 
     while not done:
 
-        # TODO: Check if reached END GAME
+        # Check if reached END GAME
+        if km_traveled > Max_DISTANCE_TRAVELED:
+            # Win
+            # Print win scenario (typing way)
+            type_text_output(WIN)
+            # Break from while loop
+
 
         # Give the player their choices
         print(CHOICES)
 
         # Handle user's input
         users_choice = input("What do you want to do? ").lower().strip("!,.,?")
-        if users_choice == "c":
+        if users_choice == "a":
+            # Eat
+            if tofu > 0:
+                tofu -= 1
+                hunger = 0
+                # feedback to player
+                print("\n-------- Mmmmmmm. Soybean goodness.\n-------- Your hunger is sated.\n")
+            else:
+                print("\n-------- You have no tofu left.\n")
+        elif users_choice == "b":
+            # Moderate speed
+            player_distance_now = random.randrange(7, 15)
+            agents_distance_now = random.randrange(7, 15)
+            # Burn fuel
+            fuel -= random.randrange(4, 8)
+            # Player distance traveled
+            km_traveled += player_distance_now
+            # Agent's distance traveled
+            agents_distance -= (player_distance_now - agents_distance_now)
+            # Feedback to Player
+            print(f"\n-------- You slowly drove {player_distance_now}kms.\n")
+        elif users_choice == "c":
             # Drive Fast
             player_distance_now = random.randrange(10, 16)
             agents_distance_now = random.randrange(7, 15)
@@ -81,7 +126,7 @@ def main():
             # Agent's distance traveled
             agents_distance -= (player_distance_now - agents_distance_now)
             # Feedback to Player
-            print(f"\n-------- You sped ahead {player_distance_now}kms!")
+            print(f"\n-------- You sped ahead {player_distance_now}kms!\n")
         elif users_choice == "d":
             # Refuel
 
@@ -102,10 +147,12 @@ def main():
         elif users_choice == "q":
             done = True
 
+        # Increase hunger
+        if users_choice not in ["a", "e"]:
+            hunger += random.randrange(5, 13)
+
         # pause
         time.sleep(1)
-
-        # TODO: Change the environment based on choice and RNG
 
     # Outroduction
     print("Thanks for playing! Please play again. :D")
