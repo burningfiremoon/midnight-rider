@@ -39,6 +39,9 @@ it makes a strange sound.
 It changes it shape.
 You've seen it before, but only on TV.
 "...Bumblebee???"
+
+
+-----GAME OVER-----
 """
 CHOICES = """
      -----
@@ -69,6 +72,7 @@ def main():
     MAX_FUEL_LEVEL = 50
     MAX_TOFU_LEVEL = 3
     Max_DISTANCE_TRAVELED = 100
+    TOFU_CHANCE = 0.03
 
     # variables
     done = False
@@ -80,6 +84,19 @@ def main():
     hunger = 0  # hunger increases with number
 
     while not done:
+        # TODO: Random events
+        # Fido
+        if tofu < 3:
+            if random.random() < TOFU_CHANCE:
+                # Fido pops up says something and refills tofu
+                tofu = MAX_TOFU_LEVEL
+                print("\n******** Your tofu is magically refilled!\n******** \"You're welcome!\" a voice "
+                      "says.\n******** It's Fido.******** He's using his tofu cooking skills.")
+        # Showing hunger
+        if hunger > 40:
+            print("******** your stomach starts hurting. You need to eat something soon.")
+        elif hunger > 20:
+            print("-------- You stomach is rumbling")
 
         # Check if reached END GAME
         if km_traveled > Max_DISTANCE_TRAVELED:
@@ -87,6 +104,10 @@ def main():
             # Print win scenario (typing way)
             type_text_output(WIN)
             # Break from while loop
+            break
+        elif hunger > 45:
+            # TODO: LOSE - TOO HUNGRY
+            # Print losing hunger scenario
             break
 
 
