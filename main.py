@@ -3,9 +3,11 @@
 # A text adventure game that is riveting.
 # IGN gives it 4 stars out of 100.
 
+import random
 import textwrap
 import sys
 import time
+
 
 INTRODUCTION = """
 
@@ -24,6 +26,9 @@ REACH THE END BEFORE THE MAN GON GETCHU.
 """
 CHOICES = """
      -----
+     C. Speed ahead at full throttle.
+     D. Stop for fuel at a refuelling station.
+        (No food available)
      E. Status Check
      Q. QUIT
      -----
@@ -40,14 +45,19 @@ def intro():
 
 def main():
     # Show introduction
-    intro()
+    # intro()
+
+    # CONSTANTS
+    MAX_FUEL_LEVEL = 50
+    MAX_TOFU_LEVEL = 3
+
     # variables
     done = False
     km_traveled: int = 0  # 100km traveled is the goal
     agents_distance = -20.0
     turns = 0        # amount of turns taken
-    tofu = 3         # 3 is max tofu
-    fuel = 50        # 50 is a full tank
+    tofu = MAX_TOFU_LEVEL
+    fuel = MAX_FUEL_LEVEL
     hunger = 0       # hunger increases with number
 
 
@@ -60,7 +70,29 @@ def main():
 
         # Handle user's input
         users_choice = input("What do you want to do? ").lower().strip("!,.,?")
-        if users_choice == "e":
+        if users_choice == "c":
+            # Drive Fast
+            player_distance_now = random.randrange(10, 16)
+            agents_distance_now = random.randrange(7, 15)
+            # Burn fuel
+            fuel -= random.randrange(5, 11)
+            # Player distance traveled
+            km_traveled += player_distance_now
+            # Agent's distance traveled
+            agents_distance -= (player_distance_now - agents_distance_now)
+            # Feedback to Player
+            print(f"\n-------- You sped ahead {player_distance_now}kms!")
+        elif users_choice == "d":
+            # Refuel
+
+            # Fill the fuel tank
+            fuel = MAX_FUEL_LEVEL
+            # Consider the agents coming closer
+            agents_distance += random.randrange(7, 15)
+            # Give the user feedback
+            print("\n-------- You filled the fuel tank.\n-------- The agents got closer...")
+
+        elif users_choice == "e":
             print(f"\t---Status---")
             print(f"km traveled: {km_traveled}")
             print(f"Fuel left: {fuel}")
@@ -69,6 +101,9 @@ def main():
             print("\t------------")
         elif users_choice == "q":
             done = True
+
+        # pause
+        time.sleep(1)
 
         # TODO: Change the environment based on choice and RNG
 
