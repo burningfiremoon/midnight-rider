@@ -87,6 +87,7 @@ def main():
             # Print win scenario (typing way)
             type_text_output(WIN)
             # Break from while loop
+            break
 
 
         # Give the player their choices
