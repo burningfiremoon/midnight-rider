@@ -56,6 +56,43 @@ They gotchu. They got the car.
 We FAILED...
 
 """
+
+LOSE_AGENTS = """
+
+The agents have closed in on you.
+There are at least 20 cars surrounding you.
+The lead car bumps your passenger side.
+You manage to correct your steering
+to keep you from crashing.
+
+You didn't see the agents car beside you.
+The driver bumps your car.
+And that's it.
+
+You spin out of control.
+The car flips over at least two times.
+or more... you lost count.
+
+Sirens.
+
+"Are they alive?" someone asks.
+"Doesn't matter. all we wanted was the car."
+You see a dog walking out of the car.
+"Was it in the car the whole time?" You
+think to yourself.
+
+The dog looks up at the officers.
+"You will never stop the revolution."
+"Did the dog just talk?" You think to yourself.
+
+You drift off into unconsciousness
+"""
+LOSE_FUEL = """
+
+You ran out of fuel.
+Car stops.
+Your bad.
+"""
 CHOICES = """
      -----
      A. Eat some tofu
@@ -79,7 +116,7 @@ def type_text_output(text):
 
 def main():
     # Show introduction
-    # type_text_output(INTRODUCTION)
+    type_text_output(INTRODUCTION)
 
     # CONSTANTS
     MAX_FUEL_LEVEL = 50
@@ -90,11 +127,11 @@ def main():
     # variables
     done = False
     km_traveled: int = 0  # 100km traveled is the goal
-    agents_distance = -20.0
+    agents_distance = -20
     turns = 0  # amount of turns taken
     tofu = MAX_TOFU_LEVEL
     fuel = MAX_FUEL_LEVEL
-    hunger =21  # hunger increases with number
+    hunger =0  # hunger increases with number
 
     while not done:
         # Random events
@@ -121,6 +158,17 @@ def main():
             break
 
         elif agents_distance >= 0:
+            # LOSE - AGENTS REACHED YOU
+            # print losing agents scenario
+            time.sleep(2)
+            type_text_output(LOSE_AGENTS)
+            break
+        elif fuel <= 0:
+            # LOSE - Ran out of fuel
+            # print losing fuel scenario
+            time.sleep(2)
+            type_text_output(LOSE_FUEL)
+
 
 
         # Showing hunger
@@ -191,12 +239,13 @@ def main():
         # Increase hunger
         if users_choice not in ["a", "e"]:
             hunger += random.randrange(5, 13)
-
+            turns += 1
         # pause
         time.sleep(1)
 
     # Outroduction
     print("Thanks for playing! Please play again. :D")
+    print(f"you got to the ending in {turns} turns.")
 
 
 if __name__ == '__main__':
